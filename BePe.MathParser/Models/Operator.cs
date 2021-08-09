@@ -83,27 +83,31 @@ namespace BePe.MathParser.Models
 
         /// <summary>
         /// Contains 5 operations : 
-        /// <list type="bullet">
-        /// <item>
-        ///     <term>Addition</term>
-        ///     <description>Precedence of 1.</description>
-        /// </item>
-        /// <item>
-        ///     <term>Substraction</term>
-        ///     <description>Precedence of 1.</description>
-        /// </item>
-        /// <item>
-        ///     <term>Multiplication</term>
-        ///     <description>Precedence of 2.</description>
-        /// </item>
-        /// <item>
-        ///     <term>Division</term>
-        ///     <description>Precedence of 2.</description>
-        /// </item>
-        /// <item>
-        ///     <term>Exponentiation</term>
-        ///     <description>Precedence of 3. Right-associative.</description>
-        /// </item>
+        /// <list type="table">
+        ///     <listheader> 
+        ///         <term>Operation</term>
+        ///         <description>Precedence</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term>Addition</term>
+        ///         <description>1</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Substraction</term>
+        ///         <description>Precedence of 1</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Multiplication</term>
+        ///         <description>2</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Division</term>
+        ///         <description>2</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Exponentiation</term>
+        ///         <description>3</description>
+        ///     </item>
         /// </list>
         /// </summary>
         public static IReadOnlyDictionary<string, Operator> DefaultOperators { get; }
