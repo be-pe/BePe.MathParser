@@ -43,7 +43,7 @@ namespace BePe.MathParser
                             stack.Push(token);
                         else
                         {
-                            while (stack.TryPeek(out Token value) && value.Value != "(")
+                            while (stack.TryPeek(out Token? value) && value.Value != "(")
                                 yield return stack.Pop();
                             try
                             {

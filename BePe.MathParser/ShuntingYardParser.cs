@@ -36,7 +36,7 @@ namespace BePe.MathParser
         /// It will try to get the variables values using the given function.
         /// </summary>
         /// <param name="variableFunc">The function to use to get the variables values. The variable strings are passed as found in the expression and the exceptions it throws aren't caught.</param>
-        public ShuntingYardParser(Func<string, double> variableFunc) : this(Operator.DefaultOperators, Function.DefaultFunctions, variableFunc) { }
+        public ShuntingYardParser(Func<string, int> variableFunc) : this(Operator.DefaultOperators, Function.DefaultFunctions, variableFunc) { }
 
         /// <summary>
         /// Initialize a parser with the given operators and functions.
@@ -45,7 +45,7 @@ namespace BePe.MathParser
         /// <param name="operators">The operators to use. The keys must be the string representation of each operator.</param>
         /// <param name="functions">The functions to use. The keys must be the string representation of each function.</param>
         /// <param name="variableFunc">The function to use to get the variables values. The variable strings are passed as found in the expression and the exceptions it throws aren't caught.</param>
-        public ShuntingYardParser(IReadOnlyDictionary<string, Operator> operators, IReadOnlyDictionary<string, Function> functions, Func<string, double> variableFunc)
+        public ShuntingYardParser(IReadOnlyDictionary<string, Operator> operators, IReadOnlyDictionary<string, Function> functions, Func<string, int>? variableFunc)
         {
             tokenizer = new Tokenizer(operators);
             shuntingYard = new ShuntingYard(operators);
@@ -61,7 +61,7 @@ namespace BePe.MathParser
         /// <exception cref="InvalidExpressionException"></exception>
         /// <exception cref="UnexpectedTokenException"></exception>
         /// <exception cref="ArgumentException">The expression is either null, empty, or a whitspace.</exception>
-        public double Parse(string expression)
+        public int Parse(string expression)
         {
             if (string.IsNullOrWhiteSpace(expression))
                 throw new ArgumentException("Can't parse null or whitespace expressions.", nameof(expression));

@@ -48,9 +48,9 @@ namespace BePe.MathParser.Models
         /// <param name="other">The token to copy from.</param>
         public Token(Token other) : this(other.Type, other.Value) { }
 
-        public bool Equals(Token other) => Type == other.Type && Value.Equals(other.Value);
+        public bool Equals(Token? other) => Type == other.Type && Value.Equals(other.Value);
 
-        public override bool Equals(object obj) => obj is Token token && Equals(token);
+        public override bool Equals(object? obj) => obj is Token token && Equals(token);
 
         public override int GetHashCode() => HashCode.Combine(Type, Value);
 

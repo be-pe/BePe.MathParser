@@ -11,7 +11,7 @@ namespace BePe.MathParser
 
         public IReadOnlyDictionary<string, Function> Functions { get; }
 
-        public Func<string, double> VarFunction { get; set; }
+        public Func<string, int>? VarFunction { get; set; }
 
         public RpnInterpreter(IReadOnlyDictionary<string, Operator> operators, IReadOnlyDictionary<string, Function> functions)
         {
@@ -19,21 +19,21 @@ namespace BePe.MathParser
             Functions = functions;
         }
 
-        public RpnInterpreter(IReadOnlyDictionary<string, Operator> operators, IReadOnlyDictionary<string, Function> functions, Func<string, double> varFunction) :
+        public RpnInterpreter(IReadOnlyDictionary<string, Operator> operators, IReadOnlyDictionary<string, Function> functions, Func<string, int>? varFunction) :
             this(operators, functions)
         {
             VarFunction = varFunction;
         }
 
-        public double Interpret(IEnumerable<Token> RPNTokens)
+        public int Interpret(IEnumerable<Token> RPNTokens)
         {
-            Stack<double> stack = new Stack<double>();
+            Stack<int> stack = new Stack<int>();
             foreach (Token token in RPNTokens)
             {
                 switch (token.Type)
                 {
                     case TokenType.Number:
-                        stack.Push(double.Parse(token.Value));
+                        stack.Push(int.Parse(token.Value));
                         break;
                     case TokenType.Variable:
                         stack.Push(GetVariable(token.Value));
@@ -42,7 +42,7 @@ namespace BePe.MathParser
                         try
                         {
                             Function function = Functions[token.Value];
-                            double[] parameters = new double[function.ParameterCount];
+                            int[] parameters = new int[function.ParameterCount];
                             for (int i = function.ParameterCount - 1; i >= 0; i--)
                                 parameters[i] = stack.Pop();
                             stack.Push(function.Func(parameters));
@@ -60,11 +60,9 @@ namespace BePe.MathParser
                         try
                         {
                             Operator op = Operators[token.Value];
-                            double b = stack.Pop();
-                            double a = stack.Pop();
-                            double result = op.Operation(a, b);
-                            if (Double.IsNaN(result) || Double.IsInfinity(result))
-                                throw new InvalidOperationException($"Invalid operation : {a} {op.Name} {b}");
+                            int b = stack.Pop();
+                            int a = stack.Pop();
+                            int result = op.Operation(a, b);
                             stack.Push(result);
                         }
                         catch (KeyNotFoundException e)
@@ -86,7 +84,7 @@ namespace BePe.MathParser
             return stack.Pop();
         }
 
-        private double GetVariable(string variableName)
+        private int GetVariable(string variableName)
         {
             if (VarFunction is null)
                 throw new InvalidOperationException("Can't use variables without providing a function.");

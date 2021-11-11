@@ -25,7 +25,7 @@ namespace BePe.MathParser.Models
         /// <summary>
         /// The function called when the operator is encountered.
         /// </summary>
-        public Func<double, double, double> Operation { get; }
+        public Func<int, int, int> Operation { get; }
 
         /// <summary>
         /// Initialize a left-associative operator.
@@ -33,7 +33,7 @@ namespace BePe.MathParser.Models
         /// <param name="name">The display name if the operator.</param>
         /// <param name="precedence">The precedence of the operator.</param>
         /// <param name="operation">The function called when the operator is encountered.</param>
-        public Operator(string name, int precedence, Func<double, double, double> operation)
+        public Operator(string name, int precedence, Func<int, int, int> operation)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name), "An operator must have a non-empty representation.");
@@ -51,8 +51,8 @@ namespace BePe.MathParser.Models
         /// Initialize an operator.
         /// </summary>
         /// <param name="rightAssociative">Wheter the operator is right associative or not.</param>
-        /// <inheritdoc cref="Operator.Operator(string, int, Func{double, double, double})"/>
-        public Operator(string name, int precedence, Func<double, double, double> operation, bool rightAssociative) : this(name, precedence, operation)
+        /// <inheritdoc cref="Operator(string, int, Func{int, int, int})"/>
+        public Operator(string name, int precedence, Func<int, int, int> operation, bool rightAssociative) : this(name, precedence, operation)
         {
             RightAssociative = rightAssociative;
         }
@@ -70,15 +70,15 @@ namespace BePe.MathParser.Models
 
         static Operator()
         {
-            Dictionary<string, Operator> defaultFunctions = new Dictionary<string, Operator>
+            Dictionary<string, Operator> defaultOperators = new Dictionary<string, Operator>
             {
                 ["+"] = new Operator("+", 1, (a, b) => a + b),
                 ["-"] = new Operator("-", 1, (a, b) => a - b),
                 ["*"] = new Operator("*", 2, (a, b) => a * b),
                 ["/"] = new Operator("/", 2, (a, b) => a / b),
-                ["^"] = new Operator("^", 3, (a, b) => Math.Pow(a, b), true)
+                ["^"] = new Operator("^", 3, (a, b) => (int) Math.Pow(a, b), true)
             };
-            DefaultOperators = new ReadOnlyDictionary<string, Operator>(defaultFunctions);
+            DefaultOperators = new ReadOnlyDictionary<string, Operator>(defaultOperators);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace BePe.MathParser.Models
         ///     </item>
         ///     <item>
         ///         <term>Substraction</term>
-        ///         <description>Precedence of 1</description>
+        ///         <description>1</description>
         ///     </item>
         ///     <item>
         ///         <term>Multiplication</term>

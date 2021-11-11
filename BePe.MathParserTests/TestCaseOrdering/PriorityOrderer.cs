@@ -35,7 +35,7 @@ namespace BePe.MathParserTests.TestCaseOrdering
 
         static TValue GetOrCreate<TKey, TValue>(IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
         {
-            if (dictionary.TryGetValue(key, out TValue result))
+            if (dictionary.TryGetValue(key, out TValue? result))
                 return result;
 
             result = new TValue();

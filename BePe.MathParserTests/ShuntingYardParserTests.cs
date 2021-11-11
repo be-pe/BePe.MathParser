@@ -1,38 +1,36 @@
-﻿using BePe.MathParser.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using BePe.MathParser;
+using BePe.MathParser.Exceptions;
 using Xunit;
 
-namespace BePe.MathParser.Tests
+namespace BePe.MathParserTests
 {
     public class ShuntingYardParserTests
     {
         [Theory]
         [MemberData(nameof(ValidExpressions))]
-        public void DefaultParser(string input, double expected)
+        public void DefaultParser(string input, int expected)
         {
             ShuntingYardParser parser = new();
-            double actual = parser.Parse(input);
+            int actual = parser.Parse(input);
             Assert.Equal(expected, actual);
         }
 
-        public static TheoryData<string, double> ValidExpressions()
+        public static TheoryData<string, int> ValidExpressions()
         {
-            TheoryData<string, double> td = new();
+            TheoryData<string, int> td = new();
 
-            td.Add("1+2", 3);
-            td.Add("1-2", -1);
-            td.Add("5*2", 10);
-            td.Add("4/2", 2);
-            td.Add("5/2", 5.0 / 2);
-            td.Add("(5+2)*5", 35);
+            td.Add("1+2", 1 + 2);
+            td.Add("1-2", 1 - 2);
+            td.Add("5*2", 5 * 2);
+            td.Add("4/2", 4 / 2);
+            td.Add("5/2", 5 / 2);
+            td.Add("(5+2)*5", (5 + 2) * 5);
             td.Add("2^2", 4);
             td.Add("2^2^2^2", 65536);
             td.Add("2^(2^(2^2))", 65536);
             td.Add("1+2^2^2^2", 65537);
             td.Add("max(10,5)", 10);
             td.Add("max(10,5*5)", 25);
-            td.Add("sin(5)", Math.Sin(5));
             td.Add("abs(5-7)", 2);
 
             return td;
@@ -52,10 +50,9 @@ namespace BePe.MathParser.Tests
 
             td.Add("(6+1", typeof(InvalidExpressionException));
             td.Add("6+1)", typeof(InvalidExpressionException));
-            td.Add("5/0", typeof(InvalidOperationException));
+            td.Add("5/0", typeof(DivideByZeroException));
             td.Add("-5", typeof(InvalidExpressionException));
             td.Add("max(2,5,7)", typeof(InvalidExpressionException));
-            td.Add("sin(2,5)", typeof(InvalidExpressionException));
             td.Add("test(6)", typeof(InvalidTokenException));
             td.Add("6=6", typeof(InvalidTokenException));
 
@@ -72,7 +69,7 @@ namespace BePe.MathParser.Tests
         [Fact]
         public void VariableThrowIsntCaught()
         {
-            static double GetVariable(string name)
+            static int GetVariable(string name)
             {
                 string upperName = name.ToUpper();
                 return upperName switch
@@ -89,9 +86,9 @@ namespace BePe.MathParser.Tests
 
         [Theory]
         [MemberData(nameof(VariableExpressions))]
-        public void VariableTests(string input, double expected)
+        public void VariableTests(string input, int expected)
         {
-            static double GetVariable(string name)
+            static int GetVariable(string name)
             {
                 string upperName = name.ToUpper();
                 return upperName switch
@@ -106,9 +103,9 @@ namespace BePe.MathParser.Tests
             Assert.Equal(expected, parser.Parse(input));
         }
 
-        public static TheoryData<string, double> VariableExpressions()
+        public static TheoryData<string, int> VariableExpressions()
         {
-            TheoryData<string, double> td = new();
+            TheoryData<string, int> td = new();
 
             td.Add("STR*2", 20);
             td.Add("max(STR, INT)", 16);

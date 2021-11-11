@@ -89,7 +89,7 @@ namespace BePe.MathParserTests.Models
         [Fact, Priority(3)]
         public void SamePrecedenceRightAssossiativeTest()
         {
-            Operator power = new("^", 3, (a, b) => Math.Pow(a, b), true);
+            Operator power = new("^", 3, (a, b) => (int) Math.Pow(a, b), true);
 
             Assert.False(power.HasLowerPrecedenceThan(power));
         }
@@ -106,7 +106,7 @@ namespace BePe.MathParserTests.Models
         [Fact, Priority(4)]
         public void CopyConstructorTest()
         {
-            Operator expected = new("^", 3, (a, b) => Math.Pow(a, b), true);
+            Operator expected = new("^", 3, (a, b) => (int) Math.Pow(a, b), true);
             Operator actual = new(expected);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Operation, actual.Operation);
